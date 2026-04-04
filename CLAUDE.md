@@ -7,7 +7,7 @@ in this repository. It defines the conventions, rules, and structure that must b
 
 Earth Events Dashboard - a Next.js application that visualizes real-time natural events
 using the NASA EONET (Earth Observatory Natural Event Tracker) API. Built with TypeScript,
-Tailwind CSS, shadcn/ui, and Mapbox GL JS.
+Tailwind CSS, shadcn/ui, and MapLibre GL JS.
 
 ## Repository Structure
 
@@ -122,11 +122,11 @@ Weekly auto-update via PR.
 - No `any` types - use proper typing or `unknown`
 - No `eval()` or `implied-eval`
 
-## Mapbox GL
+## MapLibre GL
 
-- Token stored in `.env.local` as `NEXT_PUBLIC_MAPBOX_TOKEN` (never committed)
+- No API token needed (free, open-source)
 - Map initialized with globe projection and dark style
-- Use raw `mapbox-gl` (not react-map-gl) for full API access
+- Use raw `maplibre-gl` (not react-map-gl) for full API access
 - Map instance shared via React context (MapProvider)
 
 ## Markdown

@@ -1,8 +1,8 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import mapboxgl from "mapbox-gl";
-import type { MapMouseEvent } from "mapbox-gl";
+import maplibregl from "maplibre-gl";
+import type { MapMouseEvent } from "maplibre-gl";
 
 import { getCategoryConfig } from "@/lib/constants/categories";
 import { useMap } from "@/components/map/map-provider";
@@ -66,8 +66,8 @@ function buildPopupHTML(properties: Record<string, unknown>): string {
 
 export function EventPopup({ selectedEventId }: EventPopupProps) {
   const { map, isLoaded } = useMap();
-  const popupRef = useRef<mapboxgl.Popup | null>(null);
-  const hoverPopupRef = useRef<mapboxgl.Popup | null>(null);
+  const popupRef = useRef<maplibregl.Popup | null>(null);
+  const hoverPopupRef = useRef<maplibregl.Popup | null>(null);
 
   // Hover popup on mousemove
   useEffect(() => {
@@ -101,7 +101,7 @@ export function EventPopup({ selectedEventId }: EventPopupProps) {
         hoverPopupRef.current.remove();
       }
 
-      hoverPopupRef.current = new mapboxgl.Popup({
+      hoverPopupRef.current = new maplibregl.Popup({
         closeButton: false,
         closeOnClick: false,
         offset: 12,
@@ -164,7 +164,7 @@ export function EventPopup({ selectedEventId }: EventPopupProps) {
     const coords = geometry.coordinates as [number, number];
     const properties = feature.properties ?? {};
 
-    popupRef.current = new mapboxgl.Popup({
+    popupRef.current = new maplibregl.Popup({
       closeButton: true,
       closeOnClick: true,
       offset: 12,
@@ -184,8 +184,8 @@ export function EventPopup({ selectedEventId }: EventPopupProps) {
 
   return (
     <style jsx global>{`
-      .event-hover-popup .mapboxgl-popup-content,
-      .event-selected-popup .mapboxgl-popup-content {
+      .event-hover-popup .maplibregl-popup-content,
+      .event-selected-popup .maplibregl-popup-content {
         background: rgba(24, 24, 27, 0.95);
         border: 1px solid rgba(63, 63, 70, 0.5);
         border-radius: 8px;
@@ -193,16 +193,16 @@ export function EventPopup({ selectedEventId }: EventPopupProps) {
         box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4);
         backdrop-filter: blur(8px);
       }
-      .event-hover-popup .mapboxgl-popup-tip,
-      .event-selected-popup .mapboxgl-popup-tip {
+      .event-hover-popup .maplibregl-popup-tip,
+      .event-selected-popup .maplibregl-popup-tip {
         border-top-color: rgba(24, 24, 27, 0.95);
       }
-      .event-selected-popup .mapboxgl-popup-close-button {
+      .event-selected-popup .maplibregl-popup-close-button {
         color: #a1a1aa;
         font-size: 16px;
         padding: 2px 6px;
       }
-      .event-selected-popup .mapboxgl-popup-close-button:hover {
+      .event-selected-popup .maplibregl-popup-close-button:hover {
         color: #f4f4f5;
         background: transparent;
       }

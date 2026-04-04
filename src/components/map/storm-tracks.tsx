@@ -1,7 +1,12 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
-import type { GeoJSONSource } from "mapbox-gl";
+import type {
+  ExpressionSpecification,
+  FilterSpecification,
+  GeoJSONSource,
+  Map as MaplibreMap,
+} from "maplibre-gl";
 
 import type { EONETEvent } from "@/lib/api/types";
 import { CATEGORIES } from "@/lib/constants/categories";
@@ -10,12 +15,12 @@ import { useMap } from "@/components/map/map-provider";
 const SOURCE_ID = "storm-tracks";
 const LAYER_ID = "storm-tracks-line";
 
-function buildCategoryColorExpression(): mapboxgl.Expression {
-  const entries: (string | mapboxgl.Expression)[] = [];
+function buildCategoryColorExpression(): ExpressionSpecification {
+  const entries: string[] = [];
   for (const [id, config] of Object.entries(CATEGORIES)) {
     entries.push(id, config.color);
   }
-  return ["match", ["get", "categoryId"], ...entries, "#9CA3AF"];
+  return ["match", ["get", "categoryId"], ...entries, "#9CA3AF"] as unknown as ExpressionSpecification;
 }
 
 function buildTrackFeatureCollection(
@@ -63,7 +68,7 @@ export function StormTracks({ events, activeCategories }: StormTracksProps) {
   const layerAdded = useRef(false);
 
   const addSourceAndLayer = useCallback(
-    (mapInstance: mapboxgl.Map, data: GeoJSON.FeatureCollection) => {
+    (mapInstance: MaplibreMap, data: GeoJSON.FeatureCollection) => {
       if (mapInstance.getSource(SOURCE_ID)) {
         return;
       }
@@ -129,7 +134,7 @@ export function StormTracks({ events, activeCategories }: StormTracksProps) {
       "in",
       ["get", "categoryId"],
       ["literal", activeCategories],
-    ]);
+    ] as FilterSpecification);
   }, [map, isLoaded, activeCategories]);
 
   useEffect(() => {

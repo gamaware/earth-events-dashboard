@@ -1,8 +1,13 @@
 "use client";
 
 import { useEffect, useRef, useCallback } from "react";
-import type mapboxgl from "mapbox-gl";
-import type { GeoJSONSource, MapMouseEvent } from "mapbox-gl";
+import type {
+  ExpressionSpecification,
+  FilterSpecification,
+  GeoJSONSource,
+  Map as MaplibreMap,
+  MapMouseEvent,
+} from "maplibre-gl";
 
 import { CATEGORIES } from "@/lib/constants/categories";
 import { useMap } from "@/components/map/map-provider";
@@ -14,12 +19,12 @@ const LAYER_CLUSTER_COUNT = "cluster-count";
 const LAYER_UNCLUSTERED = "unclustered-point";
 const LAYER_PULSE = "unclustered-point-pulse";
 
-function buildCategoryColorExpression(): mapboxgl.Expression {
-  const entries: (string | mapboxgl.Expression)[] = [];
+function buildCategoryColorExpression(): ExpressionSpecification {
+  const entries: string[] = [];
   for (const [id, config] of Object.entries(CATEGORIES)) {
     entries.push(id, config.color);
   }
-  return ["match", ["get", "categoryId"], ...entries, "#9CA3AF"];
+  return ["match", ["get", "categoryId"], ...entries, "#9CA3AF"] as unknown as ExpressionSpecification;
 }
 
 interface EventMarkersProps {
@@ -60,7 +65,7 @@ export function EventMarkers({
   const layersAdded = useRef(false);
 
   const addSourceAndLayers = useCallback(
-    (mapInstance: mapboxgl.Map, data: GeoJSON.FeatureCollection) => {
+    (mapInstance: MaplibreMap, data: GeoJSON.FeatureCollection) => {
       if (mapInstance.getSource(SOURCE_ID)) {
         return;
       }
@@ -94,7 +99,7 @@ export function EventMarkers({
         filter: ["has", "point_count"],
         layout: {
           "text-field": ["get", "point_count_abbreviated"],
-          "text-font": ["DIN Pro Medium", "Arial Unicode MS Bold"],
+          "text-font": ["Open Sans Bold", "Arial Unicode MS Bold"],
           "text-size": 12,
         },
         paint: {
@@ -127,18 +132,8 @@ export function EventMarkers({
         ],
         paint: {
           "circle-color": buildCategoryColorExpression(),
-          "circle-radius": [
-            "interpolate",
-            ["linear"],
-            ["remainder", ["/", ["to-number", ["get", "date"], 0], 1000], 4],
-            0,
-            8,
-            2,
-            14,
-            4,
-            8,
-          ],
-          "circle-opacity": 0.3,
+          "circle-radius": 14,
+          "circle-opacity": 0.25,
           "circle-stroke-width": 0,
         },
       });
@@ -171,28 +166,28 @@ export function EventMarkers({
     }
 
     if (activeCategories.length === 0) {
-      map.setFilter(LAYER_UNCLUSTERED, ["literal", false]);
-      map.setFilter(LAYER_PULSE, ["literal", false]);
+      map.setFilter(LAYER_UNCLUSTERED, ["literal", false] as FilterSpecification);
+      map.setFilter(LAYER_PULSE, ["literal", false] as FilterSpecification);
       return;
     }
 
-    const categoryFilter: mapboxgl.Expression = [
+    const categoryFilter = [
       "in",
       ["get", "categoryId"],
       ["literal", activeCategories],
-    ];
+    ] as ExpressionSpecification;
 
     map.setFilter(LAYER_UNCLUSTERED, [
       "all",
       ["!", ["has", "point_count"]],
       categoryFilter,
-    ]);
+    ] as FilterSpecification);
     map.setFilter(LAYER_PULSE, [
       "all",
       ["!", ["has", "point_count"]],
       ["==", ["get", "isOpen"], 1],
       categoryFilter,
-    ]);
+    ] as FilterSpecification);
   }, [map, isLoaded, activeCategories]);
 
   useEffect(() => {
@@ -220,12 +215,9 @@ export function EventMarkers({
         return;
       }
 
-      source.getClusterExpansionZoom(
-        clusterId,
-        (err: Error | null | undefined, zoom: number | null | undefined) => {
-          if (err || zoom === null || zoom === undefined) {
-            return;
-          }
+      source
+        .getClusterExpansionZoom(clusterId)
+        .then((zoom) => {
           const geometry = features[0].geometry;
           if (geometry.type !== "Point") {
             return;
@@ -234,8 +226,10 @@ export function EventMarkers({
             center: geometry.coordinates as [number, number],
             zoom,
           });
-        },
-      );
+        })
+        .catch(() => {
+          // ignore cluster expansion errors
+        });
     };
 
     const handleUnclusteredClick = (e: MapMouseEvent) => {

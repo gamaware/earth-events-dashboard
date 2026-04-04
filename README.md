@@ -2,7 +2,7 @@
 
 A real-time dashboard for visualizing natural events on Earth using
 NASA's [EONET](https://eonet.gsfc.nasa.gov/) (Earth Observatory Natural Event Tracker) API.
-Built with Next.js, TypeScript, Tailwind CSS, and Mapbox GL JS.
+Built with Next.js, TypeScript, Tailwind CSS, and MapLibre GL JS.
 
 ## Features
 
@@ -23,7 +23,6 @@ Built with Next.js, TypeScript, Tailwind CSS, and Mapbox GL JS.
 ### Prerequisites
 
 - Node.js 18+
-- A [Mapbox](https://www.mapbox.com/) access token (free tier: 50K map loads/month)
 
 ### Installation
 
@@ -31,14 +30,6 @@ Built with Next.js, TypeScript, Tailwind CSS, and Mapbox GL JS.
 git clone https://github.com/gamaware/earth-events-dashboard.git
 cd earth-events-dashboard
 npm install
-```
-
-### Configuration
-
-Create a `.env.local` file:
-
-```bash
-NEXT_PUBLIC_MAPBOX_TOKEN=pk.your_mapbox_token_here
 ```
 
 ### Development
@@ -63,7 +54,7 @@ npm start
 | Framework | Next.js 16 (App Router) |
 | Language | TypeScript (strict) |
 | Styling | Tailwind CSS 4 + shadcn/ui |
-| Map | Mapbox GL JS (globe projection) |
+| Map | MapLibre GL JS (free, no token needed) |
 | Data fetching | SWR |
 | Filter state | nuqs (URL search params) |
 | Icons | Lucide React |

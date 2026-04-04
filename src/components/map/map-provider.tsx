@@ -7,11 +7,11 @@ import {
   useState,
   type ReactNode,
 } from "react";
-import type mapboxgl from "mapbox-gl";
+import type maplibregl from "maplibre-gl";
 
 interface MapContextValue {
-  map: mapboxgl.Map | null;
-  setMap: (map: mapboxgl.Map) => void;
+  map: maplibregl.Map | null;
+  setMap: (map: maplibregl.Map) => void;
   isLoaded: boolean;
   setIsLoaded: (loaded: boolean) => void;
 }
@@ -19,10 +19,10 @@ interface MapContextValue {
 const MapContext = createContext<MapContextValue | null>(null);
 
 export function MapProvider({ children }: { children: ReactNode }) {
-  const [map, setMapState] = useState<mapboxgl.Map | null>(null);
+  const [map, setMapState] = useState<maplibregl.Map | null>(null);
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const setMap = useCallback((instance: mapboxgl.Map) => {
+  const setMap = useCallback((instance: maplibregl.Map) => {
     setMapState(instance);
   }, []);
 

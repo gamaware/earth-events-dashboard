@@ -136,8 +136,8 @@
   --sidebar-ring: #2E86F2;
 }
 
-/* Mapbox GL popup override */
-.mapboxgl-popup-content {
+/* MapLibre GL popup override */
+.maplibregl-popup-content {
   background: transparent;
   padding: 0;
   box-shadow: none;

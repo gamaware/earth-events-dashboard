@@ -52,10 +52,21 @@ export function DashboardShell() {
   const handleCategoryToggle = useCallback(
     (id: string) => {
       const current = filters.categories;
+      // When empty (all active), clicking one deselects it (show all except that one)
+      if (current.length === 0) {
+        void setFilters({
+          categories: CATEGORY_IDS.filter((c) => c !== id),
+        });
+        return;
+      }
       const updated = current.includes(id)
         ? current.filter((c) => c !== id)
         : [...current, id];
-      void setFilters({ categories: updated });
+      // If all categories selected again, reset to empty (= all)
+      void setFilters({
+        categories:
+          updated.length === CATEGORY_IDS.length ? [] : updated,
+      });
     },
     [filters.categories, setFilters],
   );
