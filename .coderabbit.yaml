@@ -1,0 +1,48 @@
+language: en-US
+reviews:
+  auto_review:
+    enabled: true
+    drafts: false
+  path_instructions:
+    - path: ".github/workflows/**"
+      instructions: >
+        Review for GitHub Actions security best practices, pinned action
+        versions, and least-privilege permissions.
+    - path: "src/app/**"
+      instructions: >
+        Review for Next.js App Router best practices: proper use of Server
+        vs Client Components, metadata exports, loading/error boundaries,
+        and data fetching patterns.
+    - path: "src/components/**"
+      instructions: >
+        Review for React best practices: proper prop typing, accessibility
+        (aria labels, keyboard navigation), memoization where appropriate,
+        and no inline styles.
+    - path: "src/lib/**"
+      instructions: >
+        Review for proper TypeScript typing, error handling, and separation
+        of concerns. API clients should handle errors gracefully.
+    - path: "src/hooks/**"
+      instructions: >
+        Review for React hooks rules compliance, proper cleanup in useEffect,
+        and correct dependency arrays.
+    - path: "**/*.test.ts"
+      instructions: >
+        Review for test quality: meaningful assertions, edge cases covered,
+        no flaky patterns, proper mocking.
+    - path: "**/*.tsx"
+      instructions: >
+        Review for accessibility (alt text, semantic HTML, ARIA labels),
+        proper TypeScript typing, and no use of any type.
+    - path: "CLAUDE.md"
+      instructions: >
+        Verify that the documented structure, hooks, and CI/CD sections
+        match the actual repository state.
+  path_filters:
+    - "!**/*.jpg"
+    - "!**/*.png"
+    - "!**/*.gif"
+    - "!**/*.svg"
+    - "!**/*.ico"
+chat:
+  auto_reply: true

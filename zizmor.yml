@@ -1,0 +1,8 @@
+rules:
+  unpinned-uses:
+    config:
+      policies:
+        "*": ref-pin
+  secrets-outside-env:
+    ignore:
+      - update-pre-commit-hooks.yml

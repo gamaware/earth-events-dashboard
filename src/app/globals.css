@@ -46,75 +46,121 @@
   --radius-2xl: calc(var(--radius) * 1.8);
   --radius-3xl: calc(var(--radius) * 2.2);
   --radius-4xl: calc(var(--radius) * 2.6);
+  --color-surface-elevated: var(--surface-elevated);
 }
 
 :root {
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --popover: oklch(1 0 0);
-  --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --accent: oklch(0.97 0 0);
-  --accent-foreground: oklch(0.205 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
+  --background: #0B0F1A;
+  --foreground: #F2F2F2;
+  --card: #121829;
+  --card-foreground: #F2F2F2;
+  --popover: #121829;
+  --popover-foreground: #F2F2F2;
+  --primary: #2E86F2;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1A2035;
+  --secondary-foreground: #F2F2F2;
+  --muted: #1A2035;
+  --muted-foreground: #9CA3B8;
+  --accent: #16C4A6;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --border: #2A3050;
+  --input: #2A3050;
+  --ring: #2E86F2;
+  --surface-elevated: #1A2035;
+  --chart-1: #2E86F2;
+  --chart-2: #16C4A6;
+  --chart-3: #FF6B35;
+  --chart-4: #8B5CF6;
+  --chart-5: #FFD700;
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+  --sidebar: #121829;
+  --sidebar-foreground: #F2F2F2;
+  --sidebar-primary: #2E86F2;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #1A2035;
+  --sidebar-accent-foreground: #F2F2F2;
+  --sidebar-border: #2A3050;
+  --sidebar-ring: #2E86F2;
+
+  /* Category colors */
+  --category-wildfires: #FF6B35;
+  --category-earthquakes: #FFD700;
+  --category-volcanoes: #FF4444;
+  --category-severe-storms: #8B5CF6;
+  --category-floods: #3B82F6;
+  --category-drought: #D97706;
+  --category-dust-haze: #A8A29E;
+  --category-landslides: #92400E;
+  --category-manmade: #EC4899;
+  --category-sea-lake-ice: #67E8F9;
+  --category-snow: #E0F2FE;
+  --category-temp-extremes: #EF4444;
+  --category-water-color: #22D3EE;
 }
 
+/* Dark-only app: .dark class mirrors :root */
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --popover: oklch(0.205 0 0);
-  --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
-  --accent: oklch(0.269 0 0);
-  --accent-foreground: oklch(0.985 0 0);
-  --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
-  --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --background: #0B0F1A;
+  --foreground: #F2F2F2;
+  --card: #121829;
+  --card-foreground: #F2F2F2;
+  --popover: #121829;
+  --popover-foreground: #F2F2F2;
+  --primary: #2E86F2;
+  --primary-foreground: #FFFFFF;
+  --secondary: #1A2035;
+  --secondary-foreground: #F2F2F2;
+  --muted: #1A2035;
+  --muted-foreground: #9CA3B8;
+  --accent: #16C4A6;
+  --accent-foreground: #FFFFFF;
+  --destructive: #EF4444;
+  --border: #2A3050;
+  --input: #2A3050;
+  --ring: #2E86F2;
+  --surface-elevated: #1A2035;
+  --chart-1: #2E86F2;
+  --chart-2: #16C4A6;
+  --chart-3: #FF6B35;
+  --chart-4: #8B5CF6;
+  --chart-5: #FFD700;
+  --sidebar: #121829;
+  --sidebar-foreground: #F2F2F2;
+  --sidebar-primary: #2E86F2;
+  --sidebar-primary-foreground: #FFFFFF;
+  --sidebar-accent: #1A2035;
+  --sidebar-accent-foreground: #F2F2F2;
+  --sidebar-border: #2A3050;
+  --sidebar-ring: #2E86F2;
+}
+
+/* MapLibre GL popup override */
+.maplibregl-popup-content {
+  background: transparent;
+  padding: 0;
+  box-shadow: none;
+}
+
+/* Pulsing animation for active event markers */
+@keyframes pulse-marker {
+  0% {
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 1;
+  }
+  70% {
+    box-shadow: 0 0 0 10px currentColor;
+    opacity: 0;
+  }
+  100% {
+    box-shadow: 0 0 0 0 currentColor;
+    opacity: 0;
+  }
+}
+
+.animate-pulse-marker {
+  animation: pulse-marker 2s infinite;
 }
 
 @layer base {

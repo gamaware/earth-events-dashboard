@@ -1,0 +1,17 @@
+extends: default
+
+ignore:
+  - node_modules/
+  - .git/
+  - .next/
+
+rules:
+  line-length:
+    max: 120
+    level: warning
+  document-start: disable
+  truthy:
+    check-keys: false
+  indentation:
+    spaces: 2
+    indent-sequences: consistent
