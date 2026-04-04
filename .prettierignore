@@ -1,0 +1,6 @@
+*.md
+.secrets.baseline
+node_modules/
+.next/
+out/
+coverage/

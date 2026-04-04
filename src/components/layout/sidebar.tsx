@@ -1,0 +1,93 @@
+"use client";
+
+import type { EONETEvent } from "@/lib/api/types";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
+import { CategoryFilter } from "@/components/filters/category-filter";
+import { StatusFilter } from "@/components/filters/status-filter";
+import { DateRangeFilter } from "@/components/filters/date-range-filter";
+import { EventList } from "@/components/events/event-list";
+
+interface SidebarProps {
+  events: EONETEvent[];
+  categories: string[];
+  onCategoryToggle: (id: string) => void;
+  activeCategories: string[];
+  status: string;
+  onStatusChange: (status: string) => void;
+  days: number;
+  onDaysChange: (days: number) => void;
+  selectedEventId: string | null;
+  onEventSelect: (id: string) => void;
+  isLoading: boolean;
+}
+
+export function Sidebar({
+  events,
+  activeCategories,
+  onCategoryToggle,
+  status,
+  onStatusChange,
+  days,
+  onDaysChange,
+  selectedEventId,
+  onEventSelect,
+  isLoading,
+}: SidebarProps) {
+  return (
+    <aside className="hidden lg:flex w-80 shrink-0 flex-col border-r border-border bg-card">
+      <div className="flex flex-col gap-4 p-4">
+        <div>
+          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Categories
+          </h2>
+          <CategoryFilter
+            activeCategories={activeCategories}
+            onToggle={onCategoryToggle}
+          />
+        </div>
+
+        <div>
+          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Status
+          </h2>
+          <StatusFilter status={status} onChange={onStatusChange} />
+        </div>
+
+        <div>
+          <h2 className="mb-2 text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+            Time Range
+          </h2>
+          <DateRangeFilter days={days} onChange={onDaysChange} />
+        </div>
+      </div>
+
+      <Separator />
+
+      <div className="flex items-center justify-between px-4 py-3">
+        <h2 className="text-xs font-semibold uppercase tracking-wider text-muted-foreground">
+          Events
+        </h2>
+        {isLoading ? (
+          <Skeleton className="h-4 w-8" />
+        ) : (
+          <span className="text-xs font-medium text-muted-foreground">
+            {events.length}
+          </span>
+        )}
+      </div>
+
+      <ScrollArea className="flex-1">
+        <div className="px-2 pb-4">
+          <EventList
+            events={events}
+            selectedEventId={selectedEventId}
+            onSelect={onEventSelect}
+            isLoading={isLoading}
+          />
+        </div>
+      </ScrollArea>
+    </aside>
+  );
+}

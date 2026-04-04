@@ -1,0 +1,208 @@
+name: Quality Checks
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+jobs:
+  markdown-lint:
+    name: Markdown Linting
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Lint Markdown files
+        id: mdlint
+        uses: DavidAnson/markdownlint-cli2-action@ce4853d43830c74c1753b39f3cf40f71c2031eb9 # v23
+        with:
+          config: ".markdownlint.yaml"
+
+      - name: Post summary
+        if: always()
+        run: |
+          MD_COUNT=$(find . -name '*.md' -not -path './.git/*' \
+            -not -path './node_modules/*' | wc -l | tr -d ' ')
+          STATUS="${{ steps.mdlint.outcome == 'success' && 'Passed' || 'Failed' }}"
+          {
+            echo "## Markdown Linting"
+            echo ""
+            echo "- Files scanned: $MD_COUNT"
+            echo "- Status: $STATUS"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  link-checker:
+    name: Check Links
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Check markdown links
+        id: linkcheck
+        uses: gaurav-nelson/github-action-markdown-link-check@5c5dfc0ac2e225883c0e5f03a85311ec2830d368 # v1
+        with:
+          config-file: ".markdown-link-check.json"
+          use-quiet-mode: "yes"
+        continue-on-error: true
+
+      - name: Post summary
+        if: always()
+        run: |
+          MD_COUNT=$(find . -name '*.md' -not -path './.git/*' \
+            -not -path './node_modules/*' | wc -l | tr -d ' ')
+          STATUS="${{ steps.linkcheck.outcome == 'success' && 'Passed' || 'Failed' }}"
+          {
+            echo "## Link Checker"
+            echo ""
+            echo "- Markdown files scanned: $MD_COUNT"
+            echo "- Status: $STATUS (continue-on-error)"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  yaml-lint:
+    name: YAML Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Lint YAML files
+        id: yamllint
+        uses: ibiqlik/action-yamllint@2576378a8e339169678f9939646ee3ee325e845c # v3
+        with:
+          config_file: ".yamllint.yml"
+
+      - name: Post summary
+        if: always()
+        run: |
+          YAML_COUNT=$(find . \( -name '*.yml' -o -name '*.yaml' \) \
+            -not -path './.git/*' -not -path './node_modules/*' | wc -l | tr -d ' ')
+          STATUS="${{ steps.yamllint.outcome == 'success' && 'Passed' || 'Failed' }}"
+          {
+            echo "## YAML Validation"
+            echo ""
+            echo "- Files scanned: $YAML_COUNT"
+            echo "- Status: $STATUS"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  file-structure:
+    name: Validate Repository Structure
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Check required files
+        id: structure
+        run: bash ${{ github.workspace }}/.github/scripts/validate-structure.sh
+
+      - name: Post summary
+        if: always()
+        run: |
+          STATUS="${{ steps.structure.outcome == 'success' && 'Passed' || 'Failed' }}"
+          {
+            echo "## Repository Structure"
+            echo ""
+            echo "- Required files and directories verified"
+            echo "- Status: $STATUS"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  readme-quality:
+    name: README Quality Check
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Check README content
+        id: readme
+        run: bash ${{ github.workspace }}/.github/scripts/check-readme.sh
+
+      - name: Post summary
+        if: always()
+        run: |
+          STATUS="${{ steps.readme.outcome == 'success' && 'Passed' || 'Failed' }}"
+          {
+            echo "## README Quality"
+            echo ""
+            echo "- Sections, badges, author, and license checked"
+            echo "- Status: $STATUS"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  actions-security:
+    name: Actions Security
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Install zizmor
+        env:
+          ZIZMOR_VERSION: "1.23.1"
+        run: |
+          tmpdir="$(mktemp -d)"
+          curl -fsL \
+            "https://github.com/woodruffw/zizmor/releases/download/v${ZIZMOR_VERSION}/zizmor-x86_64-unknown-linux-gnu.tar.gz" \
+            | tar xz -C "$tmpdir"
+          sudo mv "$tmpdir/zizmor" /usr/local/bin/zizmor
+
+      - name: Run zizmor
+        id: zizmor
+        run: zizmor --config zizmor.yml --min-severity low .github/workflows/
+
+      - name: Post summary
+        if: always()
+        run: |
+          WF_COUNT=$(find .github/workflows -name '*.yml' | wc -l | tr -d ' ')
+          STATUS="${{ steps.zizmor.outcome == 'success' && 'Passed' || 'Failed' }}"
+          {
+            echo "## Actions Security (zizmor)"
+            echo ""
+            echo "- Workflows scanned: $WF_COUNT"
+            echo "- Status: $STATUS"
+          } >> "$GITHUB_STEP_SUMMARY"
+
+  shell-check:
+    name: Shell Script Validation
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+
+      - name: Run ShellCheck
+        id: shellcheck
+        uses: ludeeus/action-shellcheck@00cae500b08a931fb5698e11e79bfbd38e612a38 # v2.0.0
+        with:
+          severity: warning
+
+      - name: Post summary
+        if: always()
+        run: |
+          SH_COUNT=$(find . -name '*.sh' -not -path './.git/*' \
+            -not -path './node_modules/*' | wc -l | tr -d ' ')
+          STATUS="${{ steps.shellcheck.outcome == 'success' && 'Passed' || 'Failed' }}"
+          {
+            echo "## Shell Script Validation (ShellCheck)"
+            echo ""
+            echo "- Scripts scanned: $SH_COUNT"
+            echo "- Status: $STATUS"
+          } >> "$GITHUB_STEP_SUMMARY"
