@@ -5,8 +5,7 @@
 1. Fork and clone the repository
 2. Run `npm install`
 3. Run `pre-commit install && pre-commit install --hook-type commit-msg`
-4. Create a `.env.local` file with your Mapbox token: `NEXT_PUBLIC_MAPBOX_TOKEN=pk.xxx`
-5. Run `npm run dev`
+4. Run `npm run dev`
 
 ## Development Workflow
 

@@ -27,7 +27,7 @@ export function DashboardShell() {
     [filters.categories],
   );
 
-  // Build API params — categories are NOT sent to API (filtered client-side via Mapbox setFilter)
+  // Build API params — categories are NOT sent to API (filtered client-side via MapLibre setFilter)
   const apiParams = useMemo(
     () => ({
       status: filters.status === "all" ? undefined : filters.status,

@@ -211,7 +211,7 @@ export function EventPopup({ selectedEventId }: EventPopupProps) {
 }
 
 /**
- * Mapbox serializes nested objects to JSON strings in feature properties.
+ * MapLibre serializes nested objects to JSON strings in feature properties.
  * Parse them back to structured data when needed.
  */
 function parseProperties(

@@ -26,7 +26,8 @@ function buildUrl(params?: UseGeoJSONParams): string {
   if (params.category !== undefined)
     searchParams.set("category", params.category);
   if (params.status !== undefined) searchParams.set("status", params.status);
-  if (params.days !== undefined) searchParams.set("days", String(params.days));
+  if (params.days !== undefined && params.days > 0)
+    searchParams.set("days", String(params.days));
   if (params.source !== undefined) searchParams.set("source", params.source);
   if (params.limit !== undefined)
     searchParams.set("limit", String(params.limit));

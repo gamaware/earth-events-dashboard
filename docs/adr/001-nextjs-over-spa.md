@@ -11,7 +11,7 @@ considered: plain React SPA (Vite), Next.js (App Router), Astro + React islands.
 
 ## Decision
 
-Use Next.js 15 with App Router.
+Use Next.js 16 with App Router.
 
 ## Rationale
 
@@ -26,4 +26,4 @@ Use Next.js 15 with App Router.
 
 - Slightly larger initial bundle than a plain Vite SPA
 - Must be deliberate about Server vs Client Component boundaries
-- Mapbox GL JS requires `"use client"` and dynamic import with `ssr: false`
+- MapLibre GL JS requires `"use client"` (browser-only APIs)
