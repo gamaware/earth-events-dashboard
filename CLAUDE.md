@@ -24,7 +24,7 @@ docs/
   settings.json         # Claude Code hooks configuration
   hooks/                # Post-edit formatters
 .github/
-  workflows/            # CI/CD (quality-checks, ci, security, update-pre-commit-hooks)
+  workflows/            # CI/CD (quality-checks, ci, security, update-pre-commit-hooks, auto-merge-bot-prs)
   actions/              # Composite actions (security-scan, update-pre-commit)
   scripts/              # Validation scripts
   ISSUE_TEMPLATE/       # Bug report and feature request templates
@@ -98,6 +98,12 @@ Semgrep SAST + Trivy SCA via `.github/actions/security-scan` composite action.
 ### update-pre-commit-hooks.yml
 
 Weekly auto-update via PR.
+
+### auto-merge-bot-prs.yml
+
+Hourly scheduled job that squash-merges Dependabot and pre-commit update PRs with admin
+bypass once every check is green. Skips drafts, conflicts, and PRs with failing or pending
+checks. Requires the `PRE_COMMIT_PAT` secret.
 
 ## Claude Code Hooks
 
