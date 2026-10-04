@@ -4,7 +4,7 @@ set -euo pipefail
 echo "Checking repository structure..."
 errors=0
 
-for file in LICENSE README.md .gitignore CLAUDE.md CODEOWNERS \
+for file in LICENSE README.md .gitignore CODEOWNERS \
   CONTRIBUTING.md SECURITY.md package.json tsconfig.json; do
   if [ ! -f "$file" ]; then
     echo "ERROR: $file missing"
