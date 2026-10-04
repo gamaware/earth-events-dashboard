@@ -34,10 +34,6 @@ reviews:
       instructions: >
         Review for accessibility (alt text, semantic HTML, ARIA labels),
         proper TypeScript typing, and no use of any type.
-    - path: "CLAUDE.md"
-      instructions: >
-        Verify that the documented structure, hooks, and CI/CD sections
-        match the actual repository state.
   path_filters:
     - "!**/*.jpg"
     - "!**/*.png"
